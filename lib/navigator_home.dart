@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:assignment1_mobile_application/screens/tripshome_page.dart';
+import 'package:assignment1_mobile_application/screens/triphome_page.dart';
 import 'package:assignment1_mobile_application/screens/profile_page.dart';
 import 'package:assignment1_mobile_application/screens/myBooking_page.dart';
 import 'package:assignment1_mobile_application/screens/cart_page.dart';

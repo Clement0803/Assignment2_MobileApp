@@ -218,7 +218,7 @@ class _BookingHotelsState extends State<BookingHotels> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 70, right: 20),
+            padding: const EdgeInsets.only(left: 20, top: 40, right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

@@ -1,7 +1,7 @@
 import 'package:assignment1_mobile_application/insideScreens/bookingFlight.dart';
 import 'package:assignment1_mobile_application/insideScreens/bookingHotels.dart';
 import 'package:flutter/material.dart';
-import 'package:assignment1_mobile_application/insideScreens/placeDetailsPage.dart';
+import 'package:assignment1_mobile_application/models/placeDetailsPage.dart';
 import 'package:assignment1_mobile_application/insideScreens/bookingActivities.dart';
 import 'package:video_player/video_player.dart';
 
@@ -35,7 +35,7 @@ class _TripsHomeState extends State<TripsHome> {
       'name': 'Petronas Towers',
       'location': 'Kuala Lumpur',
       'rating': '4.8',
-      'image': 'assets/images/petronas.jpg', // Add appropriate image paths
+      'image': 'assets/images/petronas.jpg',
       'description': 'The Petronas Towers are an iconic landmark in Kuala Lumpur, Malaysia. They were the tallest buildings in the world from 1998 to 2004 and remain the tallest twin towers in the world.',
     },
     {
@@ -88,7 +88,7 @@ class _TripsHomeState extends State<TripsHome> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.only(left: 20, right: 20),
