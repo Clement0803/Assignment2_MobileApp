@@ -35,7 +35,6 @@ CREATE TABLE activities (
   location TEXT NOT NULL,
   image TEXT NOT NULL,
   description TEXT NOT NULL,
-  numberofbookings INTEGER, 
 )
 ''');
 
@@ -65,7 +64,7 @@ CREATE TABLE activities (
     }
   }
 
-  Future<int> createActivity(String name, String location, String image, String description, int numberofbookings) async {
+  Future<int> createActivity(String name, String location, String image, String description) async {
     final db = await instance.database;
 
     final data = {
@@ -73,7 +72,6 @@ CREATE TABLE activities (
       'location': location,
       'image': image,
       'description': description,
-      'bookings': numberofbookings,
     };
     return await db.insert('activities', data);
   }
@@ -82,13 +80,12 @@ CREATE TABLE activities (
     final db = await instance.database;
 
     final result = await db.query('activities');
-    ("Fetched activities: ${result.length}");
     return result;
   }
 
   Future<void> _insertInitialActivities(Database db) async {
     final activities = [
-      {'name': 'Batu Caves Tour', 'location': 'Selangor', 'image': 'assets/images/batu_caves.jpg', 'description': 'Explore the Batu Caves, a famous Hindu temple and shrine in Malaysia.'},
+      {'name': 'Batu Caves Tour', 'location': 'Selangor', 'image': 'assets/images/batu_caves.jpg', 'description': 'Explore' },
       {'name': 'Scuba Diving', 'location': 'Sipadan Island', 'image': 'assets/images/diving.jpg', 'description': 'Discover the vibrant marine life by scuba diving in Sipadan, one of the top diving spots in the world.'},
       {'name': 'Jungle Trekking', 'location': 'Taman Negara', 'image': 'assets/images/trekking.jpg', 'description': 'Immerse yourself in the oldest rainforest in the world through exciting jungle trekking adventures in Taman Negara.'},
       {'name': 'City Tour', 'location': 'Kuala Lumpur', 'image': 'assets/images/city_tour.jpg', 'description': 'Experience the bustling city life of Kuala Lumpur with visits to iconic landmarks like the Petronas Twin Towers and KL Tower.'},
