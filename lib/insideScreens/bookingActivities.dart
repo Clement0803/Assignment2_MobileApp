@@ -1,51 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:assignment1_mobile_application/db_service.dart';
+import 'package:assignment1_mobile_application/insideScreens/activitiyDetails.dart';
 
-class BookingActivities extends StatelessWidget {
-  final List activities = [
-    {
-      'name': 'Batu Caves Tour',
-      'location': 'Selangor',
-      'image': 'assets/images/batu_caves.jpg',
-    },
-    {
-      'name': 'Scuba Diving',
-      'location': 'Sipadan Island',
-      'image': 'assets/images/diving.jpg',
-    },
-    {
-      'name': 'Jungle Trekking',
-      'location': 'Taman Negara',
-      'image': 'assets/images/trekking.jpg',
-    },
-    {
-      'name': 'City Tour',
-      'location': 'Kuala Lumpur',
-      'image': 'assets/images/city_tour.jpg',
-    },
-    {
-      'name': 'Island Hopping',
-      'location': 'Langkawi',
-      'image': 'assets/images/island_hopping.jpg',
-    },
-    {
-      'name': 'River Cruise',
-      'location': 'Melaka',
-      'image': 'assets/images/river_cruise.jpg',
-    },
-  ];
+class BookingActivities extends StatefulWidget {
+  @override
+  _BookingActivitiesState createState() => _BookingActivitiesState();
+}
+
+class _BookingActivitiesState extends State<BookingActivities> {
+  List<Map<String, dynamic>> activities = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchActivities();
+  }
+
+  Future<void> fetchActivities() async {
+    final data = await DatabaseHelper.instance.getActivities();
+    print("Activities fetched: ${data.length}");
+    setState(() {
+      activities = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: const Text('Booking Activities'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Column(
         children: [
@@ -60,56 +43,69 @@ class BookingActivities extends StatelessWidget {
                 ),
               ),
               onChanged: (value) {
-
+                // Implement search functionality
               },
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.8,
-              ),
+            child: ListView.builder(
               itemCount: activities.length,
               itemBuilder: (context, index) {
                 final activity = activities[index];
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ActivityDetailsPage(activity: activity),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: Image.asset(
-                            activity['image'],
+                            activity['image'] ?? 'assets/images/placeholder.jpg',
                             fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 150,
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              activity['name'],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                activity['name'] ?? 'Unknown Activity',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              activity['location'],
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
+                              Text(
+                                activity['location'] ?? 'Unknown Location',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
+                              Text(
+                                activity['description'] ?? 'Unknown description',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },

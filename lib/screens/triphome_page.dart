@@ -1,7 +1,7 @@
 import 'package:assignment1_mobile_application/insideScreens/bookingFlight.dart';
 import 'package:assignment1_mobile_application/insideScreens/bookingHotels.dart';
 import 'package:flutter/material.dart';
-import 'package:assignment1_mobile_application/models/placeDetailsPage.dart';
+import 'package:assignment1_mobile_application/screens/placeDetailsPage.dart';
 import 'package:assignment1_mobile_application/insideScreens/bookingActivities.dart';
 import 'package:video_player/video_player.dart';
 

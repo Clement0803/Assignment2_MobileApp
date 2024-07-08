@@ -9,14 +9,13 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('users.db');
+    _database = await _initDB('app.db');
     return _database!;
   }
 
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
@@ -28,6 +27,19 @@ CREATE TABLE users (
   password TEXT NOT NULL
 )
 ''');
+
+    await db.execute('''
+CREATE TABLE activities (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  location TEXT NOT NULL,
+  image TEXT NOT NULL,
+  description TEXT NOT NULL,
+  numberofbookings INTEGER, 
+)
+''');
+
+    await _insertInitialActivities(db);
   }
 
   Future<int> createUser(String email, String password) async {
@@ -50,6 +62,42 @@ CREATE TABLE users (
       return result.first;
     } else {
       return null;
+    }
+  }
+
+  Future<int> createActivity(String name, String location, String image, String description, int numberofbookings) async {
+    final db = await instance.database;
+
+    final data = {
+      'name': name,
+      'location': location,
+      'image': image,
+      'description': description,
+      'bookings': numberofbookings,
+    };
+    return await db.insert('activities', data);
+  }
+
+  Future<List<Map<String, dynamic>>> getActivities() async {
+    final db = await instance.database;
+
+    final result = await db.query('activities');
+    ("Fetched activities: ${result.length}");
+    return result;
+  }
+
+  Future<void> _insertInitialActivities(Database db) async {
+    final activities = [
+      {'name': 'Batu Caves Tour', 'location': 'Selangor', 'image': 'assets/images/batu_caves.jpg', 'description': 'Explore the Batu Caves, a famous Hindu temple and shrine in Malaysia.'},
+      {'name': 'Scuba Diving', 'location': 'Sipadan Island', 'image': 'assets/images/diving.jpg', 'description': 'Discover the vibrant marine life by scuba diving in Sipadan, one of the top diving spots in the world.'},
+      {'name': 'Jungle Trekking', 'location': 'Taman Negara', 'image': 'assets/images/trekking.jpg', 'description': 'Immerse yourself in the oldest rainforest in the world through exciting jungle trekking adventures in Taman Negara.'},
+      {'name': 'City Tour', 'location': 'Kuala Lumpur', 'image': 'assets/images/city_tour.jpg', 'description': 'Experience the bustling city life of Kuala Lumpur with visits to iconic landmarks like the Petronas Twin Towers and KL Tower.'},
+      {'name': 'Island Hopping', 'location': 'Langkawi', 'image': 'assets/images/island_hopping.jpg', 'description': 'Embark on an island-hopping adventure in Langkawi, exploring its pristine beaches and vibrant marine ecosystems.'},
+      {'name': 'River Cruise', 'location': 'Melaka', 'image': 'assets/images/river_cruise.jpg', 'description': 'Relax and enjoy a scenic river cruise along the Melaka River, surrounded by rich historical landmarks and cultural sites.'},
+    ];
+
+    for (var activity in activities) {
+      await db.insert('activities', activity);
     }
   }
 }
