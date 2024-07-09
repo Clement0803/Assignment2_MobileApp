@@ -4,16 +4,16 @@ import 'package:assignment1_mobile_application/models/cart_model.dart';
 import 'package:assignment1_mobile_application/models/booking_model.dart' as booking_model;
 import 'package:assignment1_mobile_application/screens/myBooking_page.dart';
 
-class CartPage extends StatefulWidget {
+class CartPages extends StatefulWidget {
   final CartModel cartModel;
 
-  CartPage({required this.cartModel});
+  CartPages({required this.cartModel});
 
   @override
   _CartPageState createState() => _CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class _CartPageState extends State<CartPages> {
   void _removeHotel(int index) {
     setState(() {
       widget.cartModel.removeHotel(index);

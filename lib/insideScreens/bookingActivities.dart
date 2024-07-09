@@ -94,13 +94,6 @@ class _BookingActivitiesState extends State<BookingActivities> {
                                   color: Colors.grey,
                                 ),
                               ),
-                              Text(
-                                activity['description'] ?? 'Unknown description',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
                             ],
                           ),
                         ),

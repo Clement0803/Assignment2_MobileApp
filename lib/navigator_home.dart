@@ -1,3 +1,4 @@
+import 'package:assignment1_mobile_application/screens/ActCart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:assignment1_mobile_application/screens/triphome_page.dart';
 import 'package:assignment1_mobile_application/screens/profile_page.dart';
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     final pages = [
       TripsHome(),
       MyBookingPage(bookings: cartModel.bookings),
-      CartPage(cartModel: cartModel),
+      CartPage(),
       ProfilePage(),
     ];
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:assignment1_mobile_application/insideScreens/bookingActivities.dart';
 import 'package:assignment1_mobile_application/db_service.dart';
+import 'package:assignment1_mobile_application/insideScreens/bookingActivities.dart';
+import 'package:assignment1_mobile_application/screens/ActCart_page.dart';
 
 class ActivityDetailsPage extends StatefulWidget {
   final Map<String, dynamic> activity;
@@ -98,15 +99,19 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 ),
                 SizedBox(width: 18),
                 ElevatedButton(
-                  onPressed: () {
-                    // Implement booking functionality using numberOfBookings
-                    // Example: Navigator.push(...);
+                  onPressed: () async {
+                    await DatabaseHelper.instance.addToCart(widget.activity, numberOfBookings);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CartPage(),
+                      ),
+                    );
                   },
                   child: Text('Add to Cart'),
                 ),
               ],
             )
-
           ],
         ),
       ),

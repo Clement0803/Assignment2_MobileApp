@@ -34,7 +34,16 @@ CREATE TABLE activities (
   name TEXT NOT NULL,
   location TEXT NOT NULL,
   image TEXT NOT NULL,
-  description TEXT NOT NULL,
+  description TEXT NOT NULL
+)
+''');
+
+    await db.execute('''
+CREATE TABLE cart (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  activityId INTEGER NOT NULL,
+  numberOfBookings INTEGER NOT NULL,
+  FOREIGN KEY (activityId) REFERENCES activities(id)
 )
 ''');
 
@@ -43,14 +52,12 @@ CREATE TABLE activities (
 
   Future<int> createUser(String email, String password) async {
     final db = await instance.database;
-
     final data = {'email': email, 'password': password};
     return await db.insert('users', data);
   }
 
   Future<Map<String, dynamic>?> getUser(String email, String password) async {
     final db = await instance.database;
-
     final result = await db.query(
       'users',
       where: 'email = ? AND password = ?',
@@ -66,7 +73,6 @@ CREATE TABLE activities (
 
   Future<int> createActivity(String name, String location, String image, String description) async {
     final db = await instance.database;
-
     final data = {
       'name': name,
       'location': location,
@@ -78,14 +84,13 @@ CREATE TABLE activities (
 
   Future<List<Map<String, dynamic>>> getActivities() async {
     final db = await instance.database;
-
     final result = await db.query('activities');
     return result;
   }
 
   Future<void> _insertInitialActivities(Database db) async {
     final activities = [
-      {'name': 'Batu Caves Tour', 'location': 'Selangor', 'image': 'assets/images/batu_caves.jpg', 'description': 'Explore' },
+      {'name': 'Batu Caves Tour', 'location': 'Selangor', 'image': 'assets/images/batu_caves.jpg', 'description': 'Explore the historic limestone caves and Hindu shrines.' },
       {'name': 'Scuba Diving', 'location': 'Sipadan Island', 'image': 'assets/images/diving.jpg', 'description': 'Discover the vibrant marine life by scuba diving in Sipadan, one of the top diving spots in the world.'},
       {'name': 'Jungle Trekking', 'location': 'Taman Negara', 'image': 'assets/images/trekking.jpg', 'description': 'Immerse yourself in the oldest rainforest in the world through exciting jungle trekking adventures in Taman Negara.'},
       {'name': 'City Tour', 'location': 'Kuala Lumpur', 'image': 'assets/images/city_tour.jpg', 'description': 'Experience the bustling city life of Kuala Lumpur with visits to iconic landmarks like the Petronas Twin Towers and KL Tower.'},
@@ -96,5 +101,43 @@ CREATE TABLE activities (
     for (var activity in activities) {
       await db.insert('activities', activity);
     }
+  }
+
+  Future<int> addToCart(Map<String, dynamic> activity, int numberOfBookings) async {
+    final db = await instance.database;
+    final data = {
+      'activityId': activity['id'],
+      'numberOfBookings': numberOfBookings,
+    };
+    return await db.insert('cart', data);
+  }
+
+  Future<List<Map<String, dynamic>>> getCartItems() async {
+    final db = await instance.database;
+    final result = await db.rawQuery('''
+      SELECT c.id AS cartId, a.*, c.numberOfBookings
+      FROM cart c
+      JOIN activities a ON c.activityId = a.id
+    ''');
+    return result;
+  }
+
+  Future<int> updateCartItem(int cartId, int newNumberOfBookings) async {
+    final db = await instance.database;
+    return await db.update(
+      'cart',
+      {'numberOfBookings': newNumberOfBookings},
+      where: 'id = ?',
+      whereArgs: [cartId],
+    );
+  }
+
+  Future<int> deleteCartItem(int cartId) async {
+    final db = await instance.database;
+    return await db.delete(
+      'cart',
+      where: 'id = ?',
+      whereArgs: [cartId],
+    );
   }
 }
