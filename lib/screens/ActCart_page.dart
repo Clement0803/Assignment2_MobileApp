@@ -23,17 +23,18 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart'),
+        automaticallyImplyLeading: false, // This removes the back arrow
+        title: const Text('Cart'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _cartItemsFuture,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.data!.isEmpty) {
-            return Center(child: Text('No items in the cart'));
+            return const Center(child: Text('No items in the cart'));
           }
 
           return ListView.builder(
@@ -49,14 +50,14 @@ class _CartPageState extends State<CartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(cartItem['location']),
-                    Text('Number of bookings: $numberOfBookings'),
+                    Text('Guests: $numberOfBookings'),
                   ],
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () async {
                         final updatedBookings = await showDialog<int>(
                           context: context,
@@ -65,7 +66,7 @@ class _CartPageState extends State<CartPage> {
                             return StatefulBuilder(
                               builder: (context, setState) {
                                 return AlertDialog(
-                                  title: Text('Update Number of Guests'),
+                                  title: const Text('Update Number of Guests'),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -74,7 +75,7 @@ class _CartPageState extends State<CartPage> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           IconButton(
-                                            icon: Icon(Icons.remove),
+                                            icon: const Icon(Icons.remove),
                                             onPressed: () {
                                               setState(() {
                                                 if (tempNumberOfBookings > 1) {
@@ -85,7 +86,7 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                           Text('$tempNumberOfBookings'),
                                           IconButton(
-                                            icon: Icon(Icons.add),
+                                            icon: const Icon(Icons.add),
                                             onPressed: () {
                                               setState(() {
                                                 tempNumberOfBookings++;
@@ -101,13 +102,13 @@ class _CartPageState extends State<CartPage> {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('Cancel'),
+                                      child: const Text('Cancel'),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop(tempNumberOfBookings);
                                       },
-                                      child: Text('Update'),
+                                      child: const Text('Update'),
                                     ),
                                   ],
                                 );
@@ -124,16 +125,26 @@ class _CartPageState extends State<CartPage> {
                           setState(() {
                             _loadCartItems();
                           });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Update successful'),
+                            ),
+                          );
                         }
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () async {
                         await DatabaseHelper.instance.deleteCartItem(cartItem['cartId']);
                         setState(() {
                           _loadCartItems();
                         });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Item deleted successfully'),
+                          ),
+                        );
                       },
                     ),
                   ],

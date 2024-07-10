@@ -297,9 +297,29 @@ class _TripsHomeState extends State<TripsHome> {
           Container(
             padding: const EdgeInsets.all(8.0),
             child: _videoController.value.isInitialized
-                ? AspectRatio(
-              aspectRatio: _videoController.value.aspectRatio,
-              child: VideoPlayer(_videoController),
+                ? Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                AspectRatio(
+                  aspectRatio: _videoController.value.aspectRatio,
+                  child: VideoPlayer(_videoController),
+                ),
+                VideoProgressIndicator(_videoController, allowScrubbing: true),
+                IconButton(
+                  icon: Icon(
+                    _videoController.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 30.0,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _videoController.value.isPlaying
+                          ? _videoController.pause()
+                          : _videoController.play();
+                    });
+                  },
+                ),
+              ],
             )
                 : const Center(child: CircularProgressIndicator()),
           ),

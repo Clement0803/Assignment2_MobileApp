@@ -18,7 +18,6 @@ class _BookingActivitiesState extends State<BookingActivities> {
 
   Future<void> fetchActivities() async {
     final data = await DatabaseHelper.instance.getActivities();
-    print("Activities fetched: ${data.length}");
     setState(() {
       activities = data;
     });
@@ -32,21 +31,6 @@ class _BookingActivitiesState extends State<BookingActivities> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: 'Search Activities',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onChanged: (value) {
-                // Implement search functionality
-              },
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: activities.length,
@@ -72,7 +56,7 @@ class _BookingActivitiesState extends State<BookingActivities> {
                             activity['image'] ?? 'assets/images/placeholder.jpg',
                             fit: BoxFit.cover,
                             width: double.infinity,
-                            height: 150,
+                            height: 200,
                           ),
                         ),
                         Padding(

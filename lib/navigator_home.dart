@@ -3,19 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:assignment1_mobile_application/screens/triphome_page.dart';
 import 'package:assignment1_mobile_application/screens/profile_page.dart';
 import 'package:assignment1_mobile_application/screens/myBooking_page.dart';
-import 'package:assignment1_mobile_application/screens/cart_page.dart';
 import 'package:assignment1_mobile_application/models/cart_model.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final int initialIndex;
+  const HomePage({super.key, this.initialIndex = 0});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentIndex = 0;
+  late int currentIndex = 0;
   CartModel cartModel = CartModel();
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex; // Initialize with the provided index
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       TripsHome(),
       MyBookingPage(bookings: cartModel.bookings),
       CartPage(),
-      ProfilePage(),
+      const ProfilePage(),
     ];
 
     return Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:assignment1_mobile_application/db_service.dart';
-import 'package:assignment1_mobile_application/insideScreens/bookingActivities.dart';
 import 'package:assignment1_mobile_application/screens/ActCart_page.dart';
+import 'package:assignment1_mobile_application/navigator_home.dart';
 
 class ActivityDetailsPage extends StatefulWidget {
   final Map<String, dynamic> activity;
@@ -35,35 +35,41 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 height: 200,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text(
               widget.activity['name'] ?? 'Unknown Activity',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
               widget.activity['location'] ?? 'Unknown Location',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text(
               widget.activity['description'] ?? 'No description available.',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text(
+                  'Guests:',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
                 IconButton(
-                  icon: Icon(Icons.remove),
+                  icon: const Icon(Icons.remove),
                   onPressed: () {
                     if (numberOfBookings > 0) {
                       setState(() {
@@ -74,10 +80,10 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 ),
                 Text(
                   '$numberOfBookings',
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () {
                     setState(() {
                       numberOfBookings++;
@@ -86,29 +92,24 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                 ),
               ],
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement booking functionality using numberOfBookings
-                    // Example: Navigator.push(...);
-                  },
-                  child: Text('Book Now'),
-                ),
-                SizedBox(width: 18),
                 ElevatedButton(
                   onPressed: () async {
                     await DatabaseHelper.instance.addToCart(widget.activity, numberOfBookings);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CartPage(),
+                        builder: (context) => HomePage(),
+                        settings: RouteSettings(
+                          arguments:2,
+                        ),
                       ),
                     );
                   },
-                  child: Text('Add to Cart'),
+                  child: const Text('Add to Cart'),
                 ),
               ],
             )
